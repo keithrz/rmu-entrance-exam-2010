@@ -5,7 +5,7 @@ require "rubygems"
 require "contest"
 $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/../lib")
 
-require "ali_rizvi_fixed"
+require "text_edit_naive"
 
 class DocumentTest < Test::Unit::TestCase
 

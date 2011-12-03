@@ -1,4 +1,4 @@
-require "lib/ali_rizvi_fixed"
+require "lib/text_edit_naive.rb"
 
 start_time = Time.now
 
