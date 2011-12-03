@@ -1,7 +1,3 @@
-######################
-# keith_zimmerman.rb #
-######################
-
 ###
 # before any changes
 ###
@@ -60,4 +56,31 @@ Finished in 0.00145 seconds.
 
 8 tests, 12 assertions, 0 failures, 0 errors
 
+###
+# after un-commenting redo
+###
 
+$ ruby test/*
+Loaded suite test/document_test
+Started
+..........
+Finished in 0.001741 seconds.
+
+10 tests, 14 assertions, 0 failures, 0 errors
+
+$ ruby memory_test.rb
+Starting Memory:
+1712
+Adding 100 characters, 1 at a time
+Current memory footprint:
+1740
+Adding 1000 characters, 1 at a time
+Current memory footprint:
+1912
+Adding 10000 characters, 1 at a time
+Current memory footprint:
+4432
+Adding 100000 characters, 1 at a time
+Current memory footprint:
+22200
+Took 9.376618s to run

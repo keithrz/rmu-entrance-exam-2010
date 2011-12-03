@@ -99,30 +99,30 @@ class DocumentTest < Test::Unit::TestCase
 
   end
 
-#  describe "Document#redo" do
-#    
-#    setup do
-#      @doc.add_text "Hello World"
-#    end  
+  describe "Document#redo" do
+    
+    setup do
+      @doc.add_text "Hello World"
+    end  
 
-#    test "can redo add_text operations" do
-#      @doc.add_text " Cup"
-#      @doc.undo
-#      @doc.redo
+    test "can redo add_text operations" do
+      @doc.add_text " Cup"
+      @doc.undo
+      @doc.redo
 
-#      assert_equal "Hello World Cup", @doc.contents
-#    end
+      assert_equal "Hello World Cup", @doc.contents
+    end
 
-#    test "can undo a redo" do
-#      @doc.add_text " Cup"
-#      @doc.undo
-#      @doc.redo
-#      @doc.undo
+    test "can undo a redo" do
+      @doc.add_text " Cup"
+      @doc.undo
+      @doc.redo
+      @doc.undo
 
-#      assert_equal "Hello World", @doc.contents
-#    end
+      assert_equal "Hello World", @doc.contents
+    end
 
-#  end
+  end
 end
 
 

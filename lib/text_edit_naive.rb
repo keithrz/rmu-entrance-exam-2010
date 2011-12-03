@@ -40,36 +40,43 @@ module TextEditor
     # ["rm", "el", 1] 
     # undo calls add_text "el", 1
     # 
+    # redo is similar, except in reverse
+    #   call add_text when the action is "add"
+    #   call remove_text when the action is "rm"
     
-    
-    def add_text(text, position=-1, snapshot_needed=true)
-      if snapshot_needed then
-        snapshot(true, "add", text, position == -1 ? @contents.length : position)
-      end
+    # with more time,
+    # add_text(text, position) should be public
+    # add_text(text, position, track_undo_redo) should be private
+    # with common code in a private method
+    def add_text(text, position=-1, track_undo_redo=true)
+      snapshot(track_undo_redo, "add", text, position == -1 ? @contents.length : position)
       contents.insert(position, text)
     end
 
-    def remove_text(first=0, last=contents.length, snapshot_needed=true)
+    # with more time,
+    # remove_text(first, last) should be public
+    # remove_text(first, last, track_undo_redo) should be private
+    # with common code in a private method
+    def remove_text(first=0, last=contents.length, track_undo_redo=true)
       # open question to product owner: 
       #  any issues with removing the text
       #  before recording the snapshot?
       removed_text = contents.slice!(first...last)
-      if snapshot_needed then
-        snapshot(true, "rm", removed_text, first)
+      snapshot(track_undo_redo, "rm", removed_text, first)
+    end
+
+    #changed snapshot to only record the change made
+    def snapshot(track_undo_redo=false, action="rm", text="", position=0)
+      if track_undo_redo then
+        @reverted = [] 
+        @snapshots << [action, text, position]
       end
     end
 
-    #change snapshot to only record the change made
-    def snapshot(clear_redo=false, action="rm", text="", position=0)
-      @reverted = [] if clear_redo
-      @snapshots << [action, text, position]
-    end
-
-    #change reverted to only record t
+    #changed reverted to only record the change made
     def undo
       return if @snapshots.empty?
 
-#      @reverted << @contents
       # admittedly, the action array is confusing
       # an object would be much more straightforward
       action = @snapshots.pop
@@ -78,14 +85,21 @@ module TextEditor
       else
         add_text action[1], action[2], false
       end
+      @reverted << action
     end
 
     def redo
       return if @reverted.empty?
 
-      snapshot
-      @contents = @reverted.pop
+      # admittedly, the action array is confusing
+      # an object would be much more straightforward
+      action = @reverted.pop
+      if action[0] == "add" then
+        add_text action[1], action[2], false
+      else
+        remove_text action[2], action[2] + action[1].length, false
+      end
+      @snapshots << action
     end
-
   end
 end
