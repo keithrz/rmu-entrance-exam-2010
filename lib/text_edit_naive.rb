@@ -8,6 +8,15 @@ module TextEditor
     
     attr_reader :contents
 
+    # instead of recording the entire contents
+    # in snapshots and reverted
+    # record the add and remove actions themselves
+    
+    # structure of action to record:
+    # { "add" => "text to add" }
+    # { "rm" => "text to remove" }
+    # with more time, this structure should be changed to an object
+    
     def add_text(text, position=-1)
       snapshot(true)
       contents.insert(position, text)
@@ -18,11 +27,13 @@ module TextEditor
       contents.slice!(first...last)
     end
 
-    def snapshot(tainted=false)
-      @reverted = [] if tainted
+    #change snapshot to only record the change made
+    def snapshot(clear_redo=false)
+      @reverted = [] if clear_redo
       @snapshots << @contents.dup
     end
 
+    #change reverted to only record t
     def undo
       return if @snapshots.empty?
 
