@@ -19,5 +19,11 @@ msg = "X"
   puts `ps -o rss= -p #{$$}`.to_i
 end
 
+time_before_display = Time.now
+puts "Took #{time_before_display - start_time}s to add text"
 
-puts "Took #{Time.now - start_time}s to run"
+doc.contents
+
+puts "Took #{Time.now - time_before_display}s to display contents"
+
+
